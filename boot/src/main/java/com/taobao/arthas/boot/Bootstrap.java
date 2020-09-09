@@ -46,18 +46,18 @@ import static com.taobao.arthas.boot.ProcessUtils.STATUS_EXEC_TIMEOUT;
 @Name("arthas-boot")
 @Summary("Bootstrap Arthas")
 @Description("EXAMPLES:\n" + "  java -jar arthas-boot.jar <pid>\n" + "  java -jar arthas-boot.jar --target-ip 0.0.0.0\n"
-                + "  java -jar arthas-boot.jar --telnet-port 9999 --http-port -1\n"
-                + "  java -jar arthas-boot.jar --tunnel-server 'ws://192.168.10.11:7777/ws'\n"
-                + "  java -jar arthas-boot.jar --tunnel-server 'ws://192.168.10.11:7777/ws' --agent-id bvDOe8XbTM2pQWjF4cfw\n"
-                + "  java -jar arthas-boot.jar --stat-url 'http://192.168.10.11:8080/api/stat'\n"
-                + "  java -jar arthas-boot.jar -c 'sysprop; thread' <pid>\n"
-                + "  java -jar arthas-boot.jar -f batch.as <pid>\n"
-                + "  java -jar arthas-boot.jar --use-version 3.4.0\n"
-                + "  java -jar arthas-boot.jar --versions\n"
-                + "  java -jar arthas-boot.jar --select arthas-demo\n"
-                + "  java -jar arthas-boot.jar --session-timeout 3600\n" + "  java -jar arthas-boot.jar --attach-only\n"
-                + "  java -jar arthas-boot.jar --repo-mirror aliyun --use-http\n" + "WIKI:\n"
-                + "  https://arthas.aliyun.com/doc\n")
+        + "  java -jar arthas-boot.jar --telnet-port 9999 --http-port -1\n"
+        + "  java -jar arthas-boot.jar --tunnel-server 'ws://192.168.10.11:7777/ws'\n"
+        + "  java -jar arthas-boot.jar --tunnel-server 'ws://192.168.10.11:7777/ws' --agent-id bvDOe8XbTM2pQWjF4cfw\n"
+        + "  java -jar arthas-boot.jar --stat-url 'http://192.168.10.11:8080/api/stat'\n"
+        + "  java -jar arthas-boot.jar -c 'sysprop; thread' <pid>\n"
+        + "  java -jar arthas-boot.jar -f batch.as <pid>\n"
+        + "  java -jar arthas-boot.jar --use-version 3.4.0\n"
+        + "  java -jar arthas-boot.jar --versions\n"
+        + "  java -jar arthas-boot.jar --select arthas-demo\n"
+        + "  java -jar arthas-boot.jar --session-timeout 3600\n" + "  java -jar arthas-boot.jar --attach-only\n"
+        + "  java -jar arthas-boot.jar --repo-mirror aliyun --use-http\n" + "WIKI:\n"
+        + "  https://arthas.aliyun.com/doc\n")
 public class Bootstrap {
     private static final int DEFAULT_TELNET_PORT = 3658;
     private static final int DEFAULT_HTTP_PORT = 8563;
@@ -122,7 +122,7 @@ public class Bootstrap {
 
     private String select;
 
-	static {
+    static {
         ARTHAS_LIB_DIR = new File(
                 System.getProperty("user.home") + File.separator + ".arthas" + File.separator + "lib");
         try {
@@ -271,8 +271,8 @@ public class Bootstrap {
     }
 
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException,
-                    ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException,
-                    IllegalArgumentException, InvocationTargetException {
+            ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException,
+            IllegalArgumentException, InvocationTargetException {
         Package bootstrapPackage = Bootstrap.class.getPackage();
         if (bootstrapPackage != null) {
             String arthasBootVersion = bootstrapPackage.getImplementationVersion();
@@ -319,7 +319,7 @@ public class Bootstrap {
         if (JavaVersionUtils.isJava6() || JavaVersionUtils.isJava7()) {
             bootstrap.setuseHttp(true);
             AnsiLog.debug("Java version is {}, only support http, set useHttp to true.",
-                            JavaVersionUtils.javaVersionStr());
+                    JavaVersionUtils.javaVersionStr());
         }
 
         // check telnet/http port
@@ -357,9 +357,9 @@ public class Bootstrap {
 
         if (httpPortPid > 0 && pid != httpPortPid) {
             AnsiLog.error("Target process {} is not the process using port {}, you will connect to an unexpected process.",
-                            pid, bootstrap.getHttpPort());
+                    pid, bootstrap.getHttpPort());
             AnsiLog.error("1. Try to restart arthas-boot, select process {}, shutdown it first with running the 'stop' command.",
-                            httpPortPid);
+                    httpPortPid);
             AnsiLog.error("2. Or try to use different http port, for example: java -jar arthas-boot.jar --telnet-port 9998 --http-port 9999", httpPortPid);
             System.exit(1);
         }
@@ -373,11 +373,11 @@ public class Bootstrap {
         if (arthasHomeDir == null && bootstrap.getUseVersion() != null) {
             // try to find from ~/.arthas/lib
             File specialVersionDir = new File(System.getProperty("user.home"), ".arthas" + File.separator + "lib"
-                            + File.separator + bootstrap.getUseVersion() + File.separator + "arthas");
+                    + File.separator + bootstrap.getUseVersion() + File.separator + "arthas");
             if (!specialVersionDir.exists()) {
                 // try to download arthas from remote server.
                 DownloadUtils.downArthasPackaging(bootstrap.getRepoMirror(), bootstrap.isuseHttp(),
-                                bootstrap.getUseVersion(), ARTHAS_LIB_DIR.getAbsolutePath());
+                        bootstrap.getUseVersion(), ARTHAS_LIB_DIR.getAbsolutePath());
             }
             verifyArthasHome(specialVersionDir.getAbsolutePath());
             arthasHomeDir = specialVersionDir;
@@ -440,7 +440,7 @@ public class Bootstrap {
                 if (remoteLastestVersion != null) {
                     if (localLastestVersion.compareTo(remoteLastestVersion) < 0) {
                         AnsiLog.info("local lastest version: {}, remote lastest version: {}, try to download from remote.",
-                                        localLastestVersion, remoteLastestVersion);
+                                localLastestVersion, remoteLastestVersion);
                         needDownload = true;
                     }
                 }
@@ -448,7 +448,7 @@ public class Bootstrap {
             if (needDownload) {
                 // try to download arthas from remote server.
                 DownloadUtils.downArthasPackaging(bootstrap.getRepoMirror(), bootstrap.isuseHttp(),
-                                remoteLastestVersion, ARTHAS_LIB_DIR.getAbsolutePath());
+                        remoteLastestVersion, ARTHAS_LIB_DIR.getAbsolutePath());
                 localLastestVersion = remoteLastestVersion;
             }
 
@@ -469,8 +469,9 @@ public class Bootstrap {
 
             // start arthas-core.jar
             List<String> attachArgs = new ArrayList<String>();
+            String coreJarAbsPath = new File(arthasHomeDir, "arthas-core.jar").getAbsolutePath();
             attachArgs.add("-jar");
-            attachArgs.add(new File(arthasHomeDir, "arthas-core.jar").getAbsolutePath());
+            attachArgs.add(coreJarAbsPath);
             attachArgs.add("-pid");
             attachArgs.add("" + pid);
             attachArgs.add("-target-ip");
@@ -480,7 +481,7 @@ public class Bootstrap {
             attachArgs.add("-http-port");
             attachArgs.add("" + bootstrap.getHttpPort());
             attachArgs.add("-core");
-            attachArgs.add(new File(arthasHomeDir, "arthas-core.jar").getAbsolutePath());
+            attachArgs.add(coreJarAbsPath);
             attachArgs.add("-agent");
             attachArgs.add(new File(arthasHomeDir, "arthas-agent.jar").getAbsolutePath());
             if (bootstrap.getSessionTimeout() != null) {
@@ -515,7 +516,7 @@ public class Bootstrap {
         // start java telnet client
         // find arthas-client.jar
         URLClassLoader classLoader = new URLClassLoader(
-                        new URL[] { new File(arthasHomeDir, "arthas-client.jar").toURI().toURL() });
+                new URL[] { new File(arthasHomeDir, "arthas-client.jar").toURI().toURL() });
         Class<?> telnetConsoleClas = classLoader.loadClass("com.taobao.arthas.client.TelnetConsole");
         Method mainMethod = telnetConsoleClas.getMethod("main", String[].class);
         List<String> telnetArgs = new ArrayList<String>();
@@ -554,7 +555,7 @@ public class Bootstrap {
             AnsiLog.error("The telnet port {} is used by process {} instead of target process {}, you will connect to an unexpected process.",
                     bootstrap.getTelnetPort(), telnetPortPid, targetPid);
             AnsiLog.error("1. Try to restart arthas-boot, select process {}, shutdown it first with running the 'stop' command.",
-                            telnetPortPid);
+                    telnetPortPid);
             AnsiLog.error("2. Or try to stop the existing arthas instance: java -jar arthas-client.jar 127.0.0.1 {} -c \"stop\"", bootstrap.getTelnetPort());
             AnsiLog.error("3. Or try to use different telnet port, for example: java -jar arthas-boot.jar --telnet-port 9998 --http-port -1");
             System.exit(1);
@@ -632,11 +633,11 @@ public class Bootstrap {
         }
         result.append("Remote versions:\n");
 
-		List<String> remoteVersions = DownloadUtils.readRemoteVersions();
-		Collections.reverse(remoteVersions);
-		for (String version : remoteVersions) {
-			result.append(" " + version).append('\n');
-		}
+        List<String> remoteVersions = DownloadUtils.readRemoteVersions();
+        Collections.reverse(remoteVersions);
+        for (String version : remoteVersions) {
+            result.append(" " + version).append('\n');
+        }
         return result.toString();
     }
 
@@ -667,7 +668,7 @@ public class Bootstrap {
             for (String fileName : fileList) {
                 if (!new File(home, fileName).exists()) {
                     throw new IllegalArgumentException(
-                                    fileName + " do not exist, arthas home: " + home.getAbsolutePath());
+                            fileName + " do not exist, arthas home: " + home.getAbsolutePath());
                 }
             }
             return;
@@ -765,6 +766,6 @@ public class Bootstrap {
     }
 
     public String getSelect() {
-		return select;
-	}
+        return select;
+    }
 }
